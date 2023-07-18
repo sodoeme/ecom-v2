@@ -41,7 +41,7 @@ app.use('/favorites', favoriteRoutes)
 
 mongoose.connection.once('open', ()=>{
   console.log('Connected to MongoDB')
-  app.listen(PORT, () => console.log('Server is running on port '+PORT))
+  app.listen(PORT, '0.0.0.0',() => console.log('Server is running on port '+PORT))
 })
 
 mongoose.connection.on('error', err => {

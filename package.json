@@ -9,7 +9,7 @@
  "scripts": {
     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
     "backend": "cd back-end && npm install && npm start",
-    "frontend": "cd front-end && npm install && npm start"
+    "frontend": "cd front-end && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
