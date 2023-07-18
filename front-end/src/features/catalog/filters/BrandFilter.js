@@ -15,6 +15,7 @@ const BrandFilter = ({onChange, checked}) => {
 
   return (
     <>
+    
       <li>
         <input
           class="filter"

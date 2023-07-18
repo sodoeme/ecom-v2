@@ -18,7 +18,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
           product.id = product._id;
           return product;
         });
-        return productAdapter.setAll(initialState, loadedProducts);
+        return productAdapter.upsertMany(initialState, loadedProducts);
       },
       providesTags: (result, error, arg) => {
         if (result?.ids) {
@@ -37,11 +37,9 @@ export const productApiSlice = apiSlice.injectEndpoints({
       },
       keepUnusedDataFor: 5,
       transformResponse: (responseData) => {
-        const loadedProduct = responseData.map((product) => {
-          product.id = product._id;
-          return product;
-        });
-        return productAdapter.setAll(initialState, loadedProduct);
+        const { _id, ...loadedProduct } = responseData;
+        loadedProduct.id = _id;
+        return productAdapter.upsertOne(initialState, loadedProduct);
       },
       providesTags: (result, error, arg) => {
         if (result?.ids) {
@@ -62,9 +60,10 @@ export const productApiSlice = apiSlice.injectEndpoints({
       transformResponse: (responseData) => {
         const loadedProducts = responseData.map((product) => {
           product.id = product._id;
+          //console.log(product)
           return product;
         });
-        return productAdapter.setAll(initialState, loadedProducts);
+        return productAdapter.upsertMany(initialState, loadedProducts);
       },
       providesTags: (result, error, arg) => {
         if (result?.ids) {
@@ -87,7 +86,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
           product.id = product._id;
           return product;
         });
-        return productAdapter.setAll(initialState, loadedProducts);
+        return productAdapter.upsertMany(initialState, loadedProducts);
       },
       providesTags: (result, error, arg) => {
         if (result?.ids) {
@@ -101,25 +100,25 @@ export const productApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-
 export const {
-    useGetAllProductsQuery,
-    useGetProductQuery,
-    useGetSimilarQuery,
-    useGetNewArrivalsQuery,
-} = productApiSlice
+  useGetAllProductsQuery,
+  useGetProductQuery,
+  useGetSimilarQuery,
+  useGetNewArrivalsQuery,
+} = productApiSlice;
 
-export const selectProductResult = productApiSlice.endpoints.getAllProducts.select()
-
+export const selectProductResult =
+  productApiSlice.endpoints.getAllProducts.select();
 
 const selectProductData = createSelector(
   selectProductResult,
-  productResult => productResult.data // normalized state object with ids & entities
-)
-
+  (productResult) => productResult.data // normalized state object with ids & entities
+);
 
 export const {
   selectAll: selectAllProducts,
-  selectById: selectProductById
+  selectById: selectProductById,
   // Pass in a selector that returns the users slice of state
-} = productAdapter.getSelectors(state => selectProductData(state) ?? initialState)
+} = productAdapter.getSelectors(
+  (state) => selectProductData(state) ?? initialState
+);

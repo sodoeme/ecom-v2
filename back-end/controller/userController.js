@@ -32,7 +32,7 @@ exports.login = async (req, res) => {
         {
             "UserInfo": {
                 "email": exists.email,
-                "roles": "user"
+                "roles":[ "user"]
             }
         },
         process.env.ACCESS_TOKEN_SECRET,
@@ -44,7 +44,7 @@ exports.login = async (req, res) => {
         secure: true, //https
         sameSite: 'None', //cross-site cookie 
     })
-
+console.log(accessToken)
     return res.json(accessToken)
 
 

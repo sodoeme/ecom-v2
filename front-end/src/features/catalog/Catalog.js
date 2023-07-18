@@ -6,7 +6,11 @@ import { useGetAllProductsQuery } from "./productApiSlice";
 import Product from "./Product";
 import { useSelector } from "react-redux";
 import { selectAllProducts } from "./productApiSlice";
+import useAuth from "../../hooks/useAuth";
+import { useGetAllFavoritesQuery } from "../favorite/favoriteApiSlice";
 const Catalog = () => {
+  //console.log(useAuth());
+
   const [checkPrompted, setCheckPrompted] = useState(false);
 
   const [filters, setFilters] = useState({
@@ -35,7 +39,9 @@ const Catalog = () => {
   );
   filterComponents.set("price", <PriceFilter onChange={handleFilterChange} />);
   const allProducts = useSelector(selectAllProducts);
-
+  const {email} = useAuth()
+  const { data: favoriteData, isLoading: isFavoriteLoading } =
+    useGetAllFavoritesQuery(email);
   const {
     data: loadedProducts,
     isLoading,
@@ -43,9 +49,27 @@ const Catalog = () => {
     isError,
     error,
   } = useGetAllProductsQuery();
-  
+
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && favoriteData) {
+      const products = [];
+      const { entities: favoriteEntities } = favoriteData;
+      const {ids} = loadedProducts
+      const favoriteEntitiesArray = favoriteData ? Object.values(favoriteData.entities) : [];
+
+      console.log(favoriteEntitiesArray)
+
+      ids.forEach((_id) => {
+        const product = loadedProducts.entities[_id];
+        const isFavorite = favoriteEntitiesArray.some(obj=>{
+          return obj.product._id == _id
+        })
+        products.push(<Product key={_id} product={product} isFavorite={isFavorite} />);
+      });
+
+      setProductList(products);
+    }
+    else if(isSuccess){
       const products = [];
       const { ids } = loadedProducts;
 
@@ -53,10 +77,11 @@ const Catalog = () => {
         const product = loadedProducts.entities[id];
         products.push(<Product product={product} />);
       });
+      console.log(products);
 
       setProductList(products);
     }
-  }, [isSuccess, loadedProducts]);
+  }, [isSuccess, loadedProducts, favoriteData]);
 
   function handleFilterChange(id, checked, filterType) {
     setFilters((prevFilters) => {
@@ -67,8 +92,7 @@ const Catalog = () => {
     });
 
     setCheckPrompted(true);
-    console.log(checkPrompted)
-    
+    console.log(checkPrompted);
   }
   function ExpandFilter(event) {
     event.preventDefault();
@@ -100,7 +124,7 @@ const Catalog = () => {
           break;
 
         case "category":
-          console.log(filters[key])
+          console.log(filters[key]);
           Object.keys(filters[key]).forEach((val) => {
             if (filters[key][val]) {
               categoryFilters.push(val);
@@ -117,7 +141,7 @@ const Catalog = () => {
           break;
       }
     });
-    console.log(allProducts)
+    console.log(allProducts);
     let filteredProducts = allProducts.filter((product) => {
       const hasBrand =
         brandFilters.length === 0 || brandFilters.includes(product.brand);
@@ -127,7 +151,7 @@ const Catalog = () => {
       const hasRandom =
         randomFilters.length === 0 ||
         randomFilters.some((tag) => product.tags.includes(tag.toLowerCase()));
-       // console.log( hasBrand ,"&&", hasCategory ,"&&", hasRandom)
+      // console.log( hasBrand ,"&&", hasCategory ,"&&", hasRandom)
 
       return hasBrand && hasCategory && hasRandom;
     });

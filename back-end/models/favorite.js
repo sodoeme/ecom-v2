@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const favoriteSchema = new Schema({
-  user: { type: String, required: true },
-  product: { type: mongoose.Schema.Types.ObjectId, required: true },
+  email: { type: String, required: true },
+  product: { type: mongoose.Schema.Types.ObjectId,  ref: 'Product', required: true },
 });
 
 //collection name is stories in the database

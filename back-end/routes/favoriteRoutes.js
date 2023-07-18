@@ -4,13 +4,13 @@ const favoriteController = require('../controller/favoriteController')
 
 
 //get all favorites
-router.get('/', favoriteController.getAllFavorites)
+router.get('/:email', favoriteController.getAllFavorites)
 
 //add favorite
-router.post('/:id', favoriteController.addFavorite)
+router.post('/', favoriteController.addFavorite)
 
 //delete favorite
-router.delete('/:id', favoriteController.removeFavorite)
+router.delete('/', favoriteController.removeFavorite)
 
   
 module.exports = router

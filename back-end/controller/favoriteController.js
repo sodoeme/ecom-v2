@@ -2,26 +2,37 @@ const Favorite = require("../models/favorite");
 const Product = require("../models/product");
 
 exports.getAllFavorites = async (req, res) => {
-  let favs = Favorite.find({ user: "64aebdaef4a8aee36a7587e6" });
-  favs = await favs.populate("product");
+  const { email } = req.params;
+  console.log(email)
+  try {
+    let favs = await Favorite.find({ email }).populate("product").exec();
+    console.log(favs)
 
-  if (!favs.length) {
-    return res.status(400).json({ message: "No products found" });
+    if (!favs.length) {
+      return res.status(400).json({ message: "No products found" });
+    }
+
+    return res.json(favs);
+  } catch (error) {
+    console.error("Error fetching favorites:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
-
-  return res.json(favs);
 };
 
+
 exports.addFavorite = async (req, res) => {
-  const { id } = req.params;
+  const {email, id} = req.body
 
   const product = await Product.findById(id);
-
+  console.log(req.body)
   if (!product) {
     return res.status(400).json({ message: "product does not exist" });
   }
-  const user = "6481083f8de76baf3cd15115";
-  const result = Favorite.create({ user: id, product: product.id });
+  const fav = await Favorite.findOne({email, product: id});
+  if (fav) {
+    return res.status(400).json({ message: "duplicate" });
+  }
+  const result = Favorite.create({email, product: product.id });
 
   if (!result) {
     return res.status(400).json({ message: "failed to add to favs" });
@@ -30,8 +41,10 @@ exports.addFavorite = async (req, res) => {
 };
 
 exports.removeFavorite = async (req, res) => {
-  const { id } = req.params;
-  const fav = await Favorite.findById(id);
+  const {email, id} = req.body
+  console.log(req.body)
+  const fav = await Favorite.findOne({email, product: id});
+  console.log(fav)
   if (!fav) {
     return res.status(400).json({ message: "not in favs" });
   }
