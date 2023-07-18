@@ -4,6 +4,7 @@ import { useGetNewArrivalsQuery } from "../catalog/productApiSlice";
 import NewArrivals from "./NewArrivals";
 import Brands from "./Brands";
 import useAuth from "../../hooks/useAuth";
+
 const Index = () => {
   console.log(useAuth())
   const [newArrivals, setNewArrivals] = useState();

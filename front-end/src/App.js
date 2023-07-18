@@ -10,7 +10,6 @@ import { ROLES } from "./config/roles";
 import RequireAuth from "./features/auth/RequireAuth";
 import PersistLogin from "./features/auth/PersistLogin";
 
-
 function App() {
   return (
     <Routes>
