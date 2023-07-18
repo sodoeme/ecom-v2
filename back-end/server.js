@@ -13,7 +13,7 @@ const productRoutes = require('./routes/productRoutes')
 const favoriteRoutes = require('./routes/favoriteRoutes')
 
 
-const PORT = process.env.PORT || 3500
+const PORT = 3500
 
 connectDB();
 
