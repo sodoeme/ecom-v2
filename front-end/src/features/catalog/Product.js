@@ -35,7 +35,7 @@ const Product = (props) => {
   const handleAddFavorite = async (e) => {
     const productId = id;
     if (!email) {
-      navigate("/login");
+     return navigate("/login");
     }
     try {
       // Call the addFavorite mutation with the email and productId

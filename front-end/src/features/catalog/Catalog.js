@@ -39,7 +39,7 @@ const Catalog = () => {
   );
   filterComponents.set("price", <PriceFilter onChange={handleFilterChange} />);
   const allProducts = useSelector(selectAllProducts);
-  const {email} = useAuth()
+  const { email } = useAuth();
   const { data: favoriteData, isLoading: isFavoriteLoading } =
     useGetAllFavoritesQuery(email);
   const {
@@ -54,22 +54,25 @@ const Catalog = () => {
     if (isSuccess && favoriteData) {
       const products = [];
       const { entities: favoriteEntities } = favoriteData;
-      const {ids} = loadedProducts
-      const favoriteEntitiesArray = favoriteData ? Object.values(favoriteData.entities) : [];
+      const { ids } = loadedProducts;
+      const favoriteEntitiesArray = favoriteData
+        ? Object.values(favoriteData.entities)
+        : [];
 
-      console.log(favoriteEntitiesArray)
+      console.log(favoriteEntitiesArray);
 
       ids.forEach((_id) => {
         const product = loadedProducts.entities[_id];
-        const isFavorite = favoriteEntitiesArray.some(obj=>{
-          return obj.product._id == _id
-        })
-        products.push(<Product key={_id} product={product} isFavorite={isFavorite} />);
+        const isFavorite = favoriteEntitiesArray.some((obj) => {
+          return obj.product._id == _id;
+        });
+        products.push(
+          <Product key={_id} product={product} isFavorite={isFavorite} />
+        );
       });
 
       setProductList(products);
-    }
-    else if(isSuccess){
+    } else if (isSuccess) {
       const products = [];
       const { ids } = loadedProducts;
 
