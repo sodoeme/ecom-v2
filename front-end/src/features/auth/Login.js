@@ -24,7 +24,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const accessToken = await login({ email: username, password });
-      console.log(accessToken);
+     // console.log(accessToken);
       dispatch(setCredentials({ accessToken: accessToken.data }));
       setUsername("");
       setPassword("");

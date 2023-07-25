@@ -6,7 +6,7 @@ import Brands from "./Brands";
 import useAuth from "../../hooks/useAuth";
 
 const Index = () => {
-  console.log(useAuth())
+  //console.log(useAuth())
   const [newArrivals, setNewArrivals] = useState();
   const { data, isLoading, isSuccess, isError, error } =
     useGetNewArrivalsQuery();

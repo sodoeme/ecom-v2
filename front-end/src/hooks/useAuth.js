@@ -7,8 +7,8 @@ const useAuth = () => {
     let isUser = false
     
     let status = "Guest"
-//console.log(token)
-    if (token) {
+console.log(token)
+    if (token && (token!== "undefined")) {
         const decoded = jwtDecode(token)
         const { email, roles } = decoded.UserInfo
 
