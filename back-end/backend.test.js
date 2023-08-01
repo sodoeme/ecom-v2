@@ -1,8 +1,5 @@
 
 
-
-// productController.test.js
-
 const productController = require("./controller/productController")
 const Product = require("./models/product");
 
@@ -45,4 +42,3 @@ describe("getAllProducts", () => {
  
 });
 
-// Similarly, you can write tests for other functions like getProduct, getSimilar, and getNewArrivals.
