@@ -8,33 +8,24 @@ import { useNavigate } from "react-router-dom";
 const Header = () => {
   const [profileDrop, setProfileDrop] = useState();
   const [logSign, setLogSign] = useState();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
-  const stat = useAuth()
+  const stat = useAuth();
 
-
-
-
-  const [sendLogout, {
-    isLoading,
-    isSuccess,
-    isError,
-    error
-}] = useSendLogoutMutation()
-
-useEffect(() => {
-  if (isSuccess) navigate('/')
-}, [isSuccess, navigate])
+  const [sendLogout, { isLoading, isSuccess, isError, error }] =
+    useSendLogoutMutation();
 
   useEffect(() => {
-    if (stat.roles.length>0) {
+    if (isSuccess) navigate("/");
+  }, [isSuccess, navigate]);
+
+  useEffect(() => {
+    if (stat.roles.length > 0) {
       setLogSign(
-      
-          <li data-name="activity" onClick={sendLogout} class="drop-down__item">
-            Sign Out
-          </li>
-      
+        <li data-name="activity" onClick={sendLogout} class="drop-down__item">
+          Sign Out
+        </li>
       );
     } else {
       setLogSign(
@@ -46,7 +37,6 @@ useEffect(() => {
       );
     }
   }, [stat]);
-  
 
   function drop() {
     if (profileDrop) {
@@ -182,7 +172,10 @@ useEffect(() => {
           </div>
 
           <div class="profile-icons">
-           <Link to="/favorites"> <img src="/assets/imgs/heart.png" alt="favorites" /></Link>
+            <Link to="/favorites">
+              {" "}
+              <img src="/assets/imgs/heart.png" alt="favorites" />
+            </Link>
             <div class="inner_header_wrp" onClick={drop}>
               <div class="inner_header_inner">
                 <div class="user_accoun">
@@ -196,9 +189,7 @@ useEffect(() => {
                         />
 
                         <div class="drop-down__menu-box">
-                          <ul class="drop-down__menu">
-                           {logSign}
-                          </ul>
+                          <ul class="drop-down__menu">{logSign}</ul>
                         </div>
                       </div>
                     </div>

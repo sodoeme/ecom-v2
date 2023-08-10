@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const getTokenFromLocalStorage = () => {
+  // Retrieve token from localStorage if not there return null
   return localStorage.getItem("userToken") || null;
 };
 
